@@ -22,12 +22,15 @@ const UserSchema = new mongoose.Schema({
       required: [true, 'Please provide password'],
       minlength: 6,
     },
-    phoneNunber: {
+    phoneNumber: {
        type: String,
+       unique: true,
        required: [true, 'Please provide phone number'],
+       minlength: 11,
+       maxlength: 11,
        validate: {
-          validator: validator.phoneNunber,
-          message: 'Please provide valid phone number',
+          validator: validator.phoneNumber,
+          message: 'Please provide valid phone number starting with 0',
        },
     }, 
     role: {
