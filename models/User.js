@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -22,14 +23,12 @@ const UserSchema = new mongoose.Schema({
       required: [true, 'Please provide password'],
       minlength: 6,
     },
-    phoneNunber: {
-       type: String,
-       required: [true, 'Please provide phone number'],
-       validate: {
-          validator: validator.phoneNunber,
-          message: 'Please provide valid phone number',
-       },
-    }, 
+    phoneNumber: {
+      type: Number,
+      required: [true, 'Please provide phone number'],
+      minlength: 11,
+      maxlength: 11,
+    },
     role: {
       type: String,
       enum: ['admin', 'user'],
@@ -38,6 +37,19 @@ const UserSchema = new mongoose.Schema({
   });
 
 
+   // For hashing password
+  UserSchema.pre('save', async function () {
+    // console.log(this.modifiedPaths());
+    // console.log(this.isModified('name'));
+    if (!this.isModified('password')) return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  });
+    // To compare the hashed password and the candidate's password
+  UserSchema.methods.comparePassword = async function (candidatePassword) {
+    const isMatch = await bcrypt.compare(candidatePassword, this.password);
+    return isMatch;
+  };
 
   module.exports = mongoose.model('User', UserSchema);
 
