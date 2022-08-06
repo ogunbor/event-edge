@@ -3,6 +3,10 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
 
+const {
+  checkPermissions
+ } = require('../utils');
+
 const createEvent = async (req, res) => {
   req.body.user = req.user.userId;
   const event = await Event.create(req.body);
@@ -11,6 +15,7 @@ const createEvent = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   const events = await Event.find({});
+  checkPermissions(req.user, events.user);
   res.status(StatusCodes.OK).json({ events, count: events.length });
 };
 
@@ -20,6 +25,7 @@ const getSingleEvent = async (req, res) => {
   if (!event) {
     throw new CustomError.NotFoundError(`No event with id : ${eventId}`);
   }
+  checkPermissions(req.user, event.user);
   res.status(StatusCodes.OK).json({ event });
 };
 
