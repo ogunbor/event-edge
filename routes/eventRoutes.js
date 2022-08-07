@@ -14,6 +14,7 @@ const {
     uploadImage,
 } = require('../controllers/EventController');
 
+const {getSingleEventTickets} = require('../controllers/ticketController')
 
 router
   .route('/')
@@ -29,6 +30,9 @@ router
   .get([authenticateUser],getSingleEvent)
   .patch([authenticateUser, authorizePermissions('admin')], updateEvent)
   .delete([authenticateUser, authorizePermissions('admin')], deleteEvent);
+
+   // Gets all the tickets associated with a particular event
+  router.route('/:id/tickets').get(getSingleEventTickets)
 
 
 module.exports = router;

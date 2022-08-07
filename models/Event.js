@@ -34,9 +34,22 @@ const EventSchema = new mongoose.Schema({
         required: true,
       },
     },
-{ timestamps: true }
 
+    // Virtual is used to connect parent to child since Event is the parent to Ticket
+    { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
+EventSchema.virtual('tickets', {
+    ref: 'Ticket',
+    localField: '_id',
+    foreignField: 'event',
+    justOne: false,
+});
+////////////////////
+
+// This is used to delete all the tickets associated with an event if the event is deleted
+EventSchema.pre('remove', async function (next) {
+    await this.model('Ticket').deleteMany({ event: this._id });
+  });
 
 module.exports = mongoose.model('Event', EventSchema);
