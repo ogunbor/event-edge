@@ -51,7 +51,7 @@ const updateTicket = async (req, res) => {
 
   if (!ticket) {
     throw new CustomError.NotFoundError(`No ticket with id : ${ticketId}`);
-  }
+}
 
   ticket.price = price;
   ticket.availableSpace = availableSpace;
@@ -66,7 +66,7 @@ const getSingleEventTickets = async (req, res) => {
     const { id: eventId } = req.params;
     const tickets = await Ticket.find({ event: eventId });
     res.status(StatusCodes.OK).json({ tickets, count: tickets.length });
-  };
+};
   
 
 // const updateSingleUserTicket = async (req, res) => {

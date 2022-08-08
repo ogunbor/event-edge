@@ -18,6 +18,7 @@ const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
 const eventRouter = require('./routes/eventRoutes');
 const ticketRouter = require('./routes/ticketRoutes');
+const speakerRouter = require('./routes/speakerRoutes');
 
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
@@ -38,6 +39,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/events', eventRouter);
 app.use('/api/v1/tickets', ticketRouter);
+app.use('/api/v1/speakers', speakerRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
